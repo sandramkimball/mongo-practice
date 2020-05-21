@@ -2,13 +2,17 @@ const mongoose = require('mongoose');
 
 const PostSchema = mongoose.Schema({
     
-    title: {
+    name: {
         type: String,
         required: false
     },
-    content: {
+    hobbies: {
         type: String,
-        required: true
+        required: false
+    },
+    url: {
+        type: String,
+        required: false
     },
     date: {
         type: Date,
@@ -16,4 +20,4 @@ const PostSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Posts', PostSchema)
+module.exports = mongoose.model('Post', PostSchema)
