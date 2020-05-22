@@ -4,6 +4,8 @@ var express = require('express');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors')
+var mongo = require('mongodb').MongoClient;
+
 require('dotenv').config()
 
 // Import Routes
@@ -41,8 +43,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// IDK what this is for
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/public/views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 // Connect to DB
-mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, ()=> {
+mongo.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, ()=> {
   console.log('---DB: Connected')
 })
 
