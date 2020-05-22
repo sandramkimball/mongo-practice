@@ -1,6 +1,14 @@
 .App{
     margin: 0 auto;
 }
+form{
+    display: flex;
+    height: 20vh;
+}
+
+form input{
+    width: 30vw;
+}
 
 .container{
     width: 90%;
