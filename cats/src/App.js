@@ -5,9 +5,9 @@ import './App.css'
 function App() {
     const [cats, setCats] = useState([])
     const [newCat, setNewCat] = useState({
-        name: '',
-        hobbies: '',
-        url: ''
+        name: null,
+        hobbies: null,
+        url: null
     })
 
     useEffect(()=>{
@@ -18,12 +18,12 @@ function App() {
 
     const handleChange = e => {
         e.preventDefault()
-        setNewCat({ [e.target.value]: value })
+        setNewCat({ [e.target.name]: e.target.value })
     }
 
-    const handleCSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault()
-        console.log('Meow Added')
+        console.log('Meow Added', newCat)
         // axios.put('http://localhost:5050/posts')
         // .then(res=> setCats(res.data.catData))
         // .catch(err=> console.log(err))
@@ -33,27 +33,30 @@ function App() {
         <div className='App'>
             <div>
                 <form>
-                    <p>Add a New Member to the Cat Family</p>
+                    <p>Add a New Cat to the Family</p>
                     <input
                         onChange={handleChange}
                         type='text'
-                        value='name'
-                        paceholder='Name'
+                        value={newCat.name}
+                        name='name'
                     />
                     <input
                         onChange={handleChange}
                         type='text'
-                        value='hobbies'
-                        palceholder='Hobbies'
+                        value={newCat.hobbies}
+                        name='hobbies'
                     />
                     <input
                         onChange={handleChange}
                         type='text'
-                        value='url'
-                        placeholder='Paste Image Url'
+                        value={newCat.url}
+                        name='url'
                     />
                     <button onSubmit={handleSubmit}>Submit</button>
                 </form>
+            </div>
+            <div className='new-cat'>
+                {newCat.name !== null &&(<h3>{newCat.name} says 'MEOW'!</h3>)}
             </div>
             <div className='container'>
                 {cats.map(cat=> (
