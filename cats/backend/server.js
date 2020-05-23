@@ -39,22 +39,28 @@ app.use(function(err, req, res, next) {
 });
 
 // Connect to DB wtih Mongo
-const url = process.env.DB_CONNECT
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true}, ()=> {
-  console.log('---MONGODB: Connected')
-});
+// const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true});
+// client.connect(err => {
+//   if(err){
+//       throw new Error('...oof. No connection.')
+//   } else {            
+//     const collection = client.db("cats").collection("posts");
+//     console.log('---MONGO DB: Connected')
+//   }
+// })
 
-client.connect(err => {
-  if(err){throw new Error('...ouch.')}
-  else {
-    const collection = client.db("cats").collection("posts");
-    console.log('---MONGODB: Connected')
-    client.close()
-  }
-})
+// Connect to DB with Mongoose
+const URI = process.env.DB_CONNECT
+const localURI = 'mongodb://localhost:27017/main';
+
+mongoose.connect(URI, { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true}, ()=> console.log('  ---MONGOOSE: connected') )
+
+const db = mongoose.connection
+db.once('open', ()=> console.log('  ---DB: connected'))
+db.on('error', err => console.log('  ---DB: error!', err))
 
 // Listen to Server
 const PORT = process.env.PORT || 8000
-app.listen(PORT, ()=> console.log(`---PORT: ${PORT}`))
+app.listen(PORT, ()=> console.log(`  ---PORT: ${PORT}`))
 
 module.exports = app;
