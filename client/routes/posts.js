@@ -4,7 +4,27 @@ var Post = require('../models/Post');
 var catData = require('../data.json');
 
 
-router.get('/', (req, res, err, client) => {
+router.get('/', (req, res) => {
+    res.send({catData})
+})
+
+
+router.post('/', (req, res) => {
+    const post = new Post({
+        name: req.body.name,
+        url: req.body.url,
+        hobbies: req.body.hobbies
+    })
+    res.send('.....meow.....')
+    // catData.save(post)
+    // .then(res=> {
+    //     res.send({catData})
+    // })
+    // .catch( err => res.status(400).json({message: err.message, error: err}) )    
+})
+
+
+router.get('/newcat', (req, res, err, client) => {
     db = client.db.cats('posts')
 
     db.find()
@@ -17,7 +37,7 @@ router.get('/', (req, res, err, client) => {
 })
 
 
-router.post('/', (req, res, err, client) => {
+router.post('/newcat', (req, res, err, client) => {
     const post = new Post({
         name: req.body.name,
         url: req.body.url,
