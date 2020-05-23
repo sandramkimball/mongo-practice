@@ -16,11 +16,13 @@ router.post('/', (req, res) => {
         hobbies: req.body.hobbies
     })
     res.send('.....meow.....')
-    // catData.save(post)
-    // .then(res=> {
-    //     res.send({catData})
-    // })
-    // .catch( err => res.status(400).json({message: err.message, error: err}) )    
+    post.save()
+    .then(res=> {
+        res.status(201).json({message:'Cat added.', data: post})
+    })
+    .catch( err => {
+        res.status(400).json({message: err.message, error: err}) 
+    })    
 })
 
 

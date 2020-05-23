@@ -2,26 +2,21 @@ var mongoose = require('mongoose')
 var createError = require('http-errors');
 var express = require('express');
 var logger = require('morgan');
-var bodyParser = require('body-parser');
 var cors = require('cors')
-var mongo = require('mongodb').MongoClient;
-
+var MongoClient = require('mongodb').MongoClient;
 require('dotenv').config()
+
+// Initiate the app
+var app = express();
 
 // Import Routes
 var indexRouter = require('./routes/index');
 var postsRouter = require('./routes/posts');
 
-var app = express();
-
 // Middlewares
 app.use(logger('dev'));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
-app.use(bodyParser.json())
 
 // Api Routes
 app.use('/', indexRouter);
@@ -43,16 +38,25 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// IDK what this is for
-app.use(express.static(__dirname + '/public'));
-app.set('views', __dirname + '/public/views');
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-
-// Connect to DB
-mongo.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, ()=> {
-  console.log('---DB: Connected')
+// Connect to DB wtih Mongo
+const url = process.env.DB_CONNECT
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true});
+client.connect(err => {
+  if(err){throw new Error('...ouch.')}
+  else {
+    const collection = client.db("cats").collection("posts");
+    console.log('---MONGODB: Connected')
+    client.close()
+  }
 })
+
+// Connect to DB with Mongoose
+// mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true})
+
+// const connection = mongoose.connection
+// connection.once('open', ()=> {
+//   console.log('---OTHER MONGOOSE THINGY: Connected')
+// })
 
 // Listen to Server
 const PORT = process.env.PORT || 8000
