@@ -40,7 +40,10 @@ app.use(function(err, req, res, next) {
 
 // Connect to DB wtih Mongo
 const url = process.env.DB_CONNECT
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true});
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true}, ()=> {
+  console.log('---MONGODB: Connected')
+});
+
 client.connect(err => {
   if(err){throw new Error('...ouch.')}
   else {
@@ -49,14 +52,6 @@ client.connect(err => {
     client.close()
   }
 })
-
-// Connect to DB with Mongoose
-// mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true})
-
-// const connection = mongoose.connection
-// connection.once('open', ()=> {
-//   console.log('---OTHER MONGOOSE THINGY: Connected')
-// })
 
 // Listen to Server
 const PORT = process.env.PORT || 8000
