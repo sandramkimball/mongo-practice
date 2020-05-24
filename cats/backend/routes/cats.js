@@ -1,18 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose')
-var catData = require('../data.json');
 var Cat = require('../models/Cat');
-var MongoClient = require('mongodb').MongoClient;
-
-// Connect to DB wtih Mongo
-// const client = new MongoClient(`${process.env.DB_CONNECT}`, { useNewUrlParser: true, useUnifiedTopology: true});
-// const db = mongoose.connection
-// db.once('open', ()=> console.log('  ---DB: connected'))
-// db.on('error', err => console.log('  ---DB: error!', err))
 
 
-// GET
 router.get('/', (req, res) => {
     Cat.find()
     .then(cats => {
@@ -38,7 +28,7 @@ router.post('/', (req, res) => {
     })    
 })
 
-router.put('/', (req, res) => {
+router.put('/:id', (req, res) => {
     var id = req.params.id
     Cat.findByIdAndUpdate({id})
     .then(cat => {
@@ -49,7 +39,7 @@ router.put('/', (req, res) => {
     })
 })
 
-router.delete('/', (req, res) => {
+router.delete('/:id', (req, res) => {
     var id = req.params.id
     Cat.findByIdAndDelete({id})
     .then( () => {
