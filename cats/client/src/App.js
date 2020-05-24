@@ -5,58 +5,77 @@ import './App.css'
 function App() {
     const [cats, setCats] = useState([])
     const [newCat, setNewCat] = useState({
-        name: null,
-        hobbies: null,
-        url: null
+        name: '',
+        hobbies: '',
+        url: ''
     })
 
     useEffect(()=>{
         axios.get('http://localhost:5050/cats')
-        .then(res=> setCats(res.data.catData))
+        .then(res=> setCats(res.data.data))
         .catch(err=> console.log(err))
-    })
+    }, [])
 
     const handleChange = e => {
         e.preventDefault()
-        setNewCat({ [e.target.name]: e.target.value })
+        setNewCat({ ...newCat, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log('Meow Added', newCat)
-        // axios.put('http://localhost:5050/cats')
-        // .then(res=> setCats(res.data.catData))
-        // .catch(err=> console.log(err))
+        axios.post('http://localhost:5050/cats', newCat)
+        .then(res=> {
+            console.log('Outgoing Cat Alert', res)
+        })
+        .catch(err=> console.log(err))
+    }
+
+    const handleAdopt = (e, cat) => {
+        e.preventDefault();
+        console.log(`ADOPTED!`)
+    }
+
+    const handleEdit = (e, cat) => {
+        e.preventDefault()
+        var id = cat.id
+        axios.put(`http://localhost:5050/cats/${id}`, newCat)
+        .then(res=> {
+            console.log('Cat Checkup Complete', res)
+        })
+        .catch(err=> console.log(err))
     }
 
     return (
         <div className='App'>
-            <div>
-                <form>
-                    <p>Add a New Cat to the Family</p>
+            <div className='form-container'>
+                <p>Add a New Cat to the Family</p>
+                <form onSubmit={handleSubmit}>
                     <input
                         onChange={handleChange}
                         type='text'
                         value={newCat.name}
                         name='name'
+                        placeholder='Name'
                     />
                     <input
                         onChange={handleChange}
                         type='text'
                         value={newCat.hobbies}
                         name='hobbies'
+                        placeholder='Hobbies'
                     />
                     <input
                         onChange={handleChange}
                         type='text'
                         value={newCat.url}
                         name='url'
+                        placeholder='Image'
                     />
-                    <button onSubmit={handleSubmit}>Submit</button>
                 </form>
+                <button onSubmit={handleSubmit}>Submit</button>
             </div>
             <div className='new-cat'>
-                {newCat.name !== null &&(<h3>{newCat.name} says 'MEOW'!</h3>)}
+                {newCat.name !== '' &&(<h3>{newCat.name} says 'MEOW'!</h3>)}
             </div>
             <div className='container'>
                 {cats.map(cat=> (
@@ -64,6 +83,10 @@ function App() {
                         <img src={cat.url} alt="pic of a fat cat"/>
                         <h3>{cat.name}</h3>
                         <h4>Enjoys {cat.hobbies}</h4>
+                        <div>
+                            <button className='adopt-btn' onClick={(e) => handleAdopt(e, cat)}>Adopt</button>
+                            <button className='adopt-btn' onClick={(e)=> handleEdit(e, cat)}>Edit</button>
+                        </div>
                     </div>
                 ))}
             </div>
