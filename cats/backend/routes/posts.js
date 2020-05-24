@@ -6,25 +6,36 @@ var Post = require('../models/Post');
 var MongoClient = require('mongodb').MongoClient;
 
 // Connect to DB wtih Mongo
-const client = new MongoClient(`${process.env.DB_CONNECT}`, { useNewUrlParser: true, useUnifiedTopology: true});
+// const client = new MongoClient(`${process.env.DB_CONNECT}`, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection
 db.once('open', ()=> console.log('  ---DB: connected'))
 db.on('error', err => console.log('  ---DB: error!', err))
 
 
-router.get('/', (req, res) => {
-    res.send({catData})
+router.get('/', (req, res, db) => {
+    // db("cats").collections('posts').find()
+    Post.find()
+    .then(posts => {
+        res.json({data: posts})
+    })
+    .catch( err => {
+        res.json({message: err.message, error: err})
+    })
 })
 
 router.post('/', (req, res) => {
-    res.send('.....meow.....')
-    // post.save()
-    // .then(res=> {
-    //     res.status(201).json({message:'Cat added.', data: post})
-    // })
-    // .catch( err => {
-    //     res.status(400).json({message: err.message, error: err}) 
-    // })    
+    const post = new Post({
+        name: req.body.name,
+        url: req.body.url,
+        hobbies: req.body.hobbies
+    })
+    post.save()
+    .then( (post)=> {
+        res.json({message:'.....meow.....', data: post})
+    })
+    .catch( err => {
+        res.json({message: err.message, error: err}) 
+    })    
 })
 
 
@@ -34,10 +45,10 @@ router.get('/newcat', (req, res) => {
     client.db("cats").collections('posts').find()
     // Post.find()
     .then( posts => {
-        res.status(200).json(posts)
+        res.json(posts)
     })
     .catch( err => {
-        res.status(400).json({message: err.message, error: err})
+        res.json({message: err.message, error: err})
     })
         
 })
