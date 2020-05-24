@@ -4,14 +4,18 @@ var express = require('express');
 var logger = require('morgan');
 var cors = require('cors')
 var MongoClient = require('mongodb').MongoClient;
-require('dotenv').config()
 
-// Initiate the app
-var app = express();
+// Config
+require('dotenv').config()
+const URI = process.env.DB_CONNECT
+const localURI = 'mongodb://localhost:27017/main';
 
 // Import Routes
 var indexRouter = require('./routes/index');
-var postsRouter = require('./routes/posts');
+var catRouter = require('./routes/cats');
+
+// Initiate the app
+var app = express();
 
 // Middlewares
 app.use(logger('dev'));
@@ -20,7 +24,7 @@ app.use(cors())
 
 // Api Routes
 app.use('/', indexRouter);
-app.use('/posts', postsRouter);
+app.use('/cats', catRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,8 +54,6 @@ app.use(function(err, req, res, next) {
 // })
 
 // Connect to DB with Mongoose
-const URI = process.env.DB_CONNECT
-const localURI = 'mongodb://localhost:27017/main';
 
 mongoose.connect(URI, { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true}, ()=> console.log('  ---MONGOOSE: connected') )
 

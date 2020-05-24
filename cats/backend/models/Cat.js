@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PostSchema = mongoose.Schema({
+const CatSchema = mongoose.Schema({
     
     name: {
         type: String,
@@ -20,4 +20,4 @@ const PostSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Cat', CatSchema)

@@ -11,7 +11,7 @@ function App() {
     })
 
     useEffect(()=>{
-        axios.get('http://localhost:5050/posts')
+        axios.get('http://localhost:5050/cats')
         .then(res=> setCats(res.data.catData))
         .catch(err=> console.log(err))
     })
@@ -24,7 +24,7 @@ function App() {
     const handleSubmit = e => {
         e.preventDefault()
         console.log('Meow Added', newCat)
-        // axios.put('http://localhost:5050/posts')
+        // axios.put('http://localhost:5050/cats')
         // .then(res=> setCats(res.data.catData))
         // .catch(err=> console.log(err))
     }
