@@ -32,6 +32,18 @@ button{
     width: 10vw;
     margin: auto;
 }
+button:hover{
+    transform: scale(1.05);
+}
+.edit-cat{
+    position: absolute;
+    z-index: 5;
+    box-shadow: 2px 6px 10px black;
+    height: 60vh;
+    width: 40vw;
+    border-radius: 6px;
+    margin: 2vh auto;
+}
 .new-cat{
     color: teal;
     margin: 0 auto;
